@@ -322,6 +322,14 @@ body {
   color: #a1a1aa;
 }
 
+.ticker-card__gain.is-up {
+  color: #34d399;
+}
+
+.ticker-card__gain.is-down {
+  color: #f87171;
+}
+
 .ticker-card__chart {
   grid-area: chart;
   flex-shrink: 0;
@@ -361,11 +369,19 @@ body {
   margin: 4px 0 2px;
 }
 
-.price-chart svg {
+.price-chart__figure {
+  position: relative;
+  width: 100%;
+  height: 0;
+  /* padding-top wird inline gesetzt (height/width der viewBox) */
+}
+
+.price-chart__figure svg {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 2 / 1;
+  height: 100%;
   overflow: visible;
 }
 
@@ -673,6 +689,14 @@ body {
   font-weight: 500;
   color: #e4e4e9;
   overflow-wrap: break-word;
+}
+
+.detail-sheet__facts dd.is-up {
+  color: #34d399;
+}
+
+.detail-sheet__facts dd.is-down {
+  color: #f87171;
 }
 
 .detail-sheet__filings {

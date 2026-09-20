@@ -25,9 +25,10 @@ export default function PriceChart({ points, width = 320, height = 160 }) {
         <span className="price-chart__readout-label">{active.label}</span>
       </div>
 
+      <div className="price-chart__figure" style={{ paddingTop: `${(height / width) * 100}%` }}>
       <svg
-        width="100%"
         viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
         role="img"
         aria-label="Kursverlauf"
         onMouseLeave={() => setActiveIndex(null)}
@@ -89,6 +90,7 @@ export default function PriceChart({ points, width = 320, height = 160 }) {
           />
         )}
       </svg>
+      </div>
 
       <div className="price-chart__axis-labels">
         {points.map((p, i) => (
