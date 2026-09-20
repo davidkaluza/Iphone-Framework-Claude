@@ -1,16 +1,15 @@
 import { useState } from "react";
 import PriceChart from "./PriceChart.jsx";
 import { formatCurrency, formatPercent, formatCompact, formatDate } from "../lib/format.js";
-import { seriesForRange, availableRanges } from "../lib/chartSeries.js";
+import { seriesForRange, availableRanges, defaultRangeDays } from "../lib/chartSeries.js";
 
 export default function TickerDetail({ entry, onClose }) {
   const [selectedId, setSelectedId] = useState(entry.primaryPurchaseId ?? entry.purchases[0]?.id);
-  const [rangeDays, setRangeDays] = useState(null); // null = automatisch (längster verfügbarer Zeitraum)
+  const [rangeDays, setRangeDays] = useState(null); // null = automatisch, je nach Kaufdatum
   const purchase = entry.purchases.find((p) => p.id === selectedId) ?? entry.purchases[0];
 
   const ranges = availableRanges(purchase?.prices);
-  const longestAvailable = [...ranges].reverse().find((r) => r.available) ?? ranges[0];
-  const effectiveDays = rangeDays ?? longestAvailable.days;
+  const effectiveDays = rangeDays ?? defaultRangeDays(purchase?.transactionDate, purchase?.prices);
   const series = seriesForRange(purchase?.prices, effectiveDays);
 
   function selectPurchase(id) {

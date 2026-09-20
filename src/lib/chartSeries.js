@@ -61,6 +61,30 @@ export function availableRanges(prices) {
   }));
 }
 
+/**
+ * Standard-Zeitraum je nachdem, wie lange der Kauf zurückliegt:
+ * ≤ 1 Woche her -> 1 Woche, ≤ 1 Monat her -> 1 Monat, sonst -> 6 Monate.
+ * Fällt auf den längsten tatsächlich verfügbaren Zeitraum zurück, falls die
+ * Zielspanne (noch) keine Daten hat.
+ */
+export function defaultRangeDays(transactionDate, prices) {
+  const ranges = availableRanges(prices);
+  const longestAvailable = [...ranges].reverse().find((r) => r.available);
+  if (!longestAvailable) return RANGE_OPTIONS[0].days;
+
+  const elapsedDays = transactionDate
+    ? (Date.now() - new Date(transactionDate).getTime()) / 86_400_000
+    : Infinity;
+
+  let target;
+  if (elapsedDays <= 7) target = 7;
+  else if (elapsedDays <= 30) target = 30;
+  else target = 180;
+
+  const bestFit = [...ranges].reverse().find((r) => r.available && r.days <= target);
+  return bestFit ? bestFit.days : longestAvailable.days;
+}
+
 export function seriesHasGap(prices, horizon = SHORT_HORIZON) {
   let seenNull = false;
   for (const def of horizon) {
