@@ -361,6 +361,14 @@ body {
   margin: 4px 0 2px;
 }
 
+.price-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  overflow: visible;
+}
+
 .price-chart.is-up {
   color: #34d399;
 }
