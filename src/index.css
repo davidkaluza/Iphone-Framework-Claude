@@ -6,10 +6,13 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+html, body {
   /* Verhindert Rubber-Banding / Overscroll-Bounce auf iOS Safari */
   overscroll-behavior: none;
   overflow: hidden;
@@ -118,6 +121,11 @@ body {
   padding: 18px;
 }
 
+.card--accent {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.08);
+}
+
 .card h1 {
   margin: 0 0 8px;
   font-size: 22px;
@@ -136,6 +144,18 @@ body {
   line-height: 1.5;
   color: #d4d4d8;
   font-size: 15px;
+}
+
+.btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #6366f1;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .status-list {
