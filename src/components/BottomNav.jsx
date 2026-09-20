@@ -1,6 +1,6 @@
 const ITEMS = [
   { key: "home", icon: "🏠", label: "Start" },
-  { key: "settings", icon: "⚙️", label: "Einstellungen" },
+  { key: "status", icon: "📶", label: "Status" },
   { key: "info", icon: "ℹ️", label: "Info" }
 ];
 
