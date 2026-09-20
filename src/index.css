@@ -728,8 +728,8 @@ body {
 }
 
 .bottom-nav__icon {
-  font-size: 20px;
-  line-height: 1;
+  width: 22px;
+  height: 22px;
 }
 
 .bottom-nav__label {
