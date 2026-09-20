@@ -10,8 +10,8 @@ export default function Header({ online, swActive }) {
   return (
     <header className="app-header">
       <div className="app-header__brand">
-        <img src="/icons/icon-192.png" alt="Logo" className="app-header__logo" />
-        <span className="app-header__title">PWA Framework</span>
+        <img src={`${import.meta.env.BASE_URL}icons/icon-192.png`} alt="Logo" className="app-header__logo" />
+        <span className="app-header__title">Insider Tickers</span>
       </div>
       <div className="status-indicator" aria-live="polite">
         <span className={dotClass}></span>

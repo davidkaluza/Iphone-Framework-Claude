@@ -13,25 +13,28 @@ export default function TickerCard({ entry, onOpen }) {
 
   return (
     <button type="button" className="ticker-card" onClick={() => onOpen(entry)}>
-      <div className="ticker-card__row">
-        <span className="ticker-card__issuer" title={entry.issuer ?? entry.ticker}>
-          {entry.issuer ?? entry.ticker}
-        </span>
-        <span className="ticker-card__price">{formatCurrency(primary?.pricePerShare)}</span>
-        <span className="ticker-card__chart">
-          <Sparkline points={series} />
-        </span>
-      </div>
+      <span className="ticker-card__issuer" title={entry.issuer ?? entry.ticker}>
+        {entry.issuer ?? entry.ticker}
+      </span>
 
-      <div className="ticker-card__row ticker-card__row--secondary">
-        <span className="ticker-card__ticker">{entry.ticker}</span>
+      <span className="ticker-card__ticker">
+        {entry.ticker}
         {incomplete && (
           <span className="ticker-card__notice" title="Für diesen Ticker fehlen einzelne Kursdaten">
             ⚠ unvollständig
           </span>
         )}
+      </span>
+
+      <span className="ticker-card__stats">
+        <span className="ticker-card__price-label">Kaufkurs</span>
+        <span className="ticker-card__price">{formatCurrency(primary?.pricePerShare)}</span>
         <span className={`ticker-card__gain ${gainDirection}`}>{formatPercent(primary?.gainPct)}</span>
-      </div>
+      </span>
+
+      <span className="ticker-card__chart">
+        <Sparkline points={series} />
+      </span>
     </button>
   );
 }

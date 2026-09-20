@@ -13,9 +13,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icons/icon.svg", "icons/apple-touch-icon.png"],
       manifest: {
-        name: "PWA Framework",
-        short_name: "PWA App",
-        description: "Minimalistisches React-PWA-Grundgerüst, optimiert für iOS/iPadOS.",
+        name: "Insider Tickers",
+        short_name: "Insider",
+        description: "Insider-Käufe von Superinvestoren – Kursverlauf und Kennzahlen pro Ticker.",
         start_url: BASE_PATH,
         scope: BASE_PATH,
         display: "standalone",
