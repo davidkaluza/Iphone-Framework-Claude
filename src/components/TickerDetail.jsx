@@ -1,12 +1,40 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PriceChart from "./PriceChart.jsx";
 import { formatCurrency, formatPercent, formatCompact, formatDate } from "../lib/format.js";
 import { seriesForRange, availableRanges, defaultRangeDays } from "../lib/chartSeries.js";
+
+const DISMISS_THRESHOLD_PX = 110;
 
 export default function TickerDetail({ entry, onClose }) {
   const [selectedId, setSelectedId] = useState(entry.primaryPurchaseId ?? entry.purchases[0]?.id);
   const [rangeDays, setRangeDays] = useState(null); // null = automatisch, je nach Kaufdatum
   const purchase = entry.purchases.find((p) => p.id === selectedId) ?? entry.purchases[0];
+
+  const [dragY, setDragY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartY = useRef(0);
+
+  function handleDragStart(e) {
+    dragStartY.current = e.clientY;
+    setIsDragging(true);
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  }
+
+  function handleDragMove(e) {
+    if (!isDragging) return;
+    const delta = e.clientY - dragStartY.current;
+    if (delta > 0) setDragY(delta); // nur nach unten ziehen
+  }
+
+  function handleDragEnd() {
+    if (!isDragging) return;
+    setIsDragging(false);
+    if (dragY > DISMISS_THRESHOLD_PX) {
+      onClose();
+    } else {
+      setDragY(0); // zurückschnappen
+    }
+  }
 
   const ranges = availableRanges(purchase?.prices);
   const effectiveDays = rangeDays ?? defaultRangeDays(purchase?.transactionDate, purchase?.prices);
@@ -24,18 +52,30 @@ export default function TickerDetail({ entry, onClose }) {
 
   return (
     <div className="detail-overlay" role="dialog" aria-modal="true" onClick={onClose}>
-      <div className="detail-sheet" onClick={(e) => e.stopPropagation()}>
-        <div className="detail-sheet__handle" />
+      <div
+        className={`detail-sheet${isDragging ? " is-dragging" : ""}`}
+        style={dragY ? { transform: `translateY(${dragY}px)` } : undefined}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          className="detail-sheet__drag-zone"
+          onPointerDown={handleDragStart}
+          onPointerMove={handleDragMove}
+          onPointerUp={handleDragEnd}
+          onPointerCancel={handleDragEnd}
+        >
+          <div className="detail-sheet__handle" />
 
-        <header className="detail-sheet__header">
-          <div>
-            <h2>{entry.issuer ?? entry.ticker}</h2>
-            <span className="detail-sheet__ticker">{entry.ticker}</span>
-          </div>
-          <button type="button" className="detail-sheet__close" onClick={onClose} aria-label="Schließen">
-            ✕
-          </button>
-        </header>
+          <header className="detail-sheet__header">
+            <div>
+              <h2>{entry.issuer ?? entry.ticker}</h2>
+              <span className="detail-sheet__ticker">{entry.ticker}</span>
+            </div>
+            <button type="button" className="detail-sheet__close" onClick={onClose} aria-label="Schließen">
+              ✕
+            </button>
+          </header>
+        </div>
 
         {entry.purchases.length > 1 && (
           <div className="detail-sheet__tabs" role="tablist" aria-label="Käufe auswählen">
