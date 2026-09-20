@@ -330,6 +330,12 @@ body {
   color: #f87171;
 }
 
+.sparkline__purchase-dot {
+  fill: #fbbf24;
+  stroke: #0f0f14;
+  stroke-width: 1;
+}
+
 .sparkline--empty {
   width: 88px;
   height: 34px;
@@ -400,6 +406,33 @@ body {
   stroke-width: 1;
   stroke-dasharray: 3 3;
   opacity: 0.4;
+}
+
+.price-chart__purchase-line {
+  stroke: #fbbf24;
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  opacity: 0.5;
+}
+
+.price-chart__dot--purchase {
+  fill: #fbbf24;
+  stroke: #0f0f14;
+  stroke-width: 1.5;
+}
+
+.price-chart__legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.price-chart__legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fbbf24;
+  display: inline-block;
 }
 
 .price-chart__axis-labels {

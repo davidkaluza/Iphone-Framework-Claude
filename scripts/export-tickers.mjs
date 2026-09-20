@@ -98,7 +98,12 @@ async function main() {
         purchases
       };
     })
-    .sort((a, b) => a.ticker.localeCompare(b.ticker));
+    .sort((a, b) => {
+      // Neuester Insider-Kauf zuerst (statt alphabetisch nach Ticker)
+      const dateA = a.purchases[0]?.transactionDate ?? "";
+      const dateB = b.purchases[0]?.transactionDate ?? "";
+      return dateB.localeCompare(dateA);
+    });
 
   const output = {
     generatedAt: new Date().toISOString(),

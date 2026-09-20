@@ -7,8 +7,9 @@ export default function Sparkline({ points, width = 88, height = 34 }) {
 
   const values = points.map((p) => p.value);
   const trendUp = values[values.length - 1] >= values[0];
-  const { linePath, areaPath } = buildLinePath(values, width, height);
+  const { linePath, areaPath, coords } = buildLinePath(values, width, height);
   const gradientId = `spark-grad-${trendUp ? "up" : "down"}`;
+  const purchaseCoord = coords[0];
 
   return (
     <svg
@@ -17,7 +18,7 @@ export default function Sparkline({ points, width = 88, height = 34 }) {
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       role="img"
-      aria-label="Kursverlauf, 30 Tage"
+      aria-label="Kursverlauf seit Kauf, 30 Tage"
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
@@ -27,6 +28,7 @@ export default function Sparkline({ points, width = 88, height = 34 }) {
       </defs>
       <path d={areaPath} fill={`url(#${gradientId})`} stroke="none" />
       <path d={linePath} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      {purchaseCoord && <circle cx={purchaseCoord.x} cy={purchaseCoord.y} r="2.5" className="sparkline__purchase-dot" />}
     </svg>
   );
 }

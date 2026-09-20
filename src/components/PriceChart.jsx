@@ -16,6 +16,7 @@ export default function PriceChart({ points, width = 320, height = 160 }) {
   const gradientId = `price-grad-${trendUp ? "up" : "down"}`;
   const active = activeIndex !== null ? points[activeIndex] : points[points.length - 1];
   const activeCoord = activeIndex !== null ? coords[activeIndex] : coords[coords.length - 1];
+  const purchaseCoord = coords[0];
 
   return (
     <div className={`price-chart ${trendUp ? "is-up" : "is-down"}`}>
@@ -40,20 +41,32 @@ export default function PriceChart({ points, width = 320, height = 160 }) {
 
         <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} className="price-chart__axis" />
 
+        {purchaseCoord && (
+          <line
+            x1={purchaseCoord.x}
+            y1={padding}
+            x2={purchaseCoord.x}
+            y2={height - padding}
+            className="price-chart__purchase-line"
+          />
+        )}
+
         <path d={areaPath} fill={`url(#${gradientId})`} stroke="none" />
         <path d={linePath} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 
-        {coords.map((c, i) => (
-          <circle
-            key={points[i].key}
-            cx={c.x}
-            cy={c.y}
-            r={i === activeIndex ? 5 : 3}
-            className="price-chart__dot"
-            onMouseEnter={() => setActiveIndex(i)}
-            onClick={() => setActiveIndex(i)}
-          />
-        ))}
+        {coords.map((c, i) =>
+          i === 0 ? null : (
+            <circle
+              key={points[i].key}
+              cx={c.x}
+              cy={c.y}
+              r={i === activeIndex ? 5 : 3}
+              className="price-chart__dot"
+              onMouseEnter={() => setActiveIndex(i)}
+              onClick={() => setActiveIndex(i)}
+            />
+          )
+        )}
 
         {activeCoord && (
           <line
@@ -62,6 +75,17 @@ export default function PriceChart({ points, width = 320, height = 160 }) {
             x2={activeCoord.x}
             y2={height - padding}
             className="price-chart__crosshair"
+          />
+        )}
+
+        {purchaseCoord && (
+          <circle
+            cx={purchaseCoord.x}
+            cy={purchaseCoord.y}
+            r={activeIndex === 0 ? 6 : 4.5}
+            className="price-chart__dot price-chart__dot--purchase"
+            onMouseEnter={() => setActiveIndex(0)}
+            onClick={() => setActiveIndex(0)}
           />
         )}
       </svg>
@@ -80,8 +104,12 @@ export default function PriceChart({ points, width = 320, height = 160 }) {
       </div>
 
       <div className="price-chart__range">
-        <span>Tief {formatCurrency(min)}</span>
-        <span>Hoch {formatCurrency(max)}</span>
+        <span className="price-chart__legend">
+          <span className="price-chart__legend-dot" /> Kaufzeitpunkt
+        </span>
+        <span>
+          Tief {formatCurrency(min)} · Hoch {formatCurrency(max)}
+        </span>
       </div>
     </div>
   );
