@@ -36,6 +36,31 @@ export function buildSeries(prices, horizon = SHORT_HORIZON) {
   return points;
 }
 
+// Auswählbare Zeiträume für die Detailansicht.
+export const RANGE_OPTIONS = [
+  { key: "1w", label: "1W", days: 7 },
+  { key: "2w", label: "2W", days: 14 },
+  { key: "3w", label: "3W", days: 21 },
+  { key: "1m", label: "1M", days: 30 },
+  { key: "2m", label: "2M", days: 60 },
+  { key: "3m", label: "3M", days: 90 },
+  { key: "6m", label: "6M", days: 180 },
+  { key: "1y", label: "1J", days: 365 }
+];
+
+/** Punktreihe von Tag 0 (Kauf) bis einschließlich maxDays, aus FULL_HORIZON. */
+export function seriesForRange(prices, maxDays) {
+  return buildSeries(prices, FULL_HORIZON.filter((def) => def.days <= maxDays));
+}
+
+/** Für welche RANGE_OPTIONS liegen für diesen Kauf mind. 2 Punkte vor? */
+export function availableRanges(prices) {
+  return RANGE_OPTIONS.map((range) => ({
+    ...range,
+    available: seriesForRange(prices, range.days).length >= 2
+  }));
+}
+
 export function seriesHasGap(prices, horizon = SHORT_HORIZON) {
   let seenNull = false;
   for (const def of horizon) {

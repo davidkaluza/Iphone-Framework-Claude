@@ -1,12 +1,22 @@
 import { useState } from "react";
 import PriceChart from "./PriceChart.jsx";
 import { formatCurrency, formatPercent, formatCompact, formatDate } from "../lib/format.js";
-import { buildSeries, FULL_HORIZON } from "../lib/chartSeries.js";
+import { seriesForRange, availableRanges } from "../lib/chartSeries.js";
 
 export default function TickerDetail({ entry, onClose }) {
   const [selectedId, setSelectedId] = useState(entry.primaryPurchaseId ?? entry.purchases[0]?.id);
+  const [rangeDays, setRangeDays] = useState(null); // null = automatisch (längster verfügbarer Zeitraum)
   const purchase = entry.purchases.find((p) => p.id === selectedId) ?? entry.purchases[0];
-  const series = buildSeries(purchase?.prices, FULL_HORIZON);
+
+  const ranges = availableRanges(purchase?.prices);
+  const longestAvailable = [...ranges].reverse().find((r) => r.available) ?? ranges[0];
+  const effectiveDays = rangeDays ?? longestAvailable.days;
+  const series = seriesForRange(purchase?.prices, effectiveDays);
+
+  function selectPurchase(id) {
+    setSelectedId(id);
+    setRangeDays(null); // Zeitraum bei Kaufwechsel zurücksetzen
+  }
 
   const missingFields = [];
   if (typeof purchase?.pricePerShare !== "number") missingFields.push("Kaufkurs");
@@ -37,7 +47,7 @@ export default function TickerDetail({ entry, onClose }) {
                 role="tab"
                 aria-selected={p.id === selectedId}
                 className={`detail-sheet__tab${p.id === selectedId ? " is-active" : ""}`}
-                onClick={() => setSelectedId(p.id)}
+                onClick={() => selectPurchase(p.id)}
               >
                 {formatDate(p.transactionDate)}
               </button>
@@ -52,6 +62,22 @@ export default function TickerDetail({ entry, onClose }) {
         )}
 
         <PriceChart points={series} />
+
+        <div className="detail-sheet__ranges" role="tablist" aria-label="Zeitraum auswählen">
+          {ranges.map((r) => (
+            <button
+              key={r.key}
+              type="button"
+              role="tab"
+              aria-selected={r.days === effectiveDays}
+              disabled={!r.available}
+              className={`detail-sheet__range${r.days === effectiveDays ? " is-active" : ""}`}
+              onClick={() => setRangeDays(r.days)}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
 
         <dl className="detail-sheet__facts">
           <div>

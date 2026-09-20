@@ -1,5 +1,5 @@
 import Sparkline from "./Sparkline.jsx";
-import { formatCurrency, formatPercent } from "../lib/format.js";
+import { formatCurrency, formatPercent, formatDateDMY } from "../lib/format.js";
 import { buildSeries, SHORT_HORIZON } from "../lib/chartSeries.js";
 
 export default function TickerCard({ entry, onOpen }) {
@@ -19,6 +19,9 @@ export default function TickerCard({ entry, onOpen }) {
 
       <span className="ticker-card__ticker">
         {entry.ticker}
+        {primary?.transactionDate && (
+          <span className="ticker-card__date">({formatDateDMY(primary.transactionDate)})</span>
+        )}
         {incomplete && (
           <span className="ticker-card__notice" title="Für diesen Ticker fehlen einzelne Kursdaten">
             ⚠ unvollständig

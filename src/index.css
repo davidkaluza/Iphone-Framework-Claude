@@ -270,12 +270,19 @@ body {
 .ticker-card__ticker {
   grid-area: ticker;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: 6px;
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #a1a1aa;
+}
+
+.ticker-card__date {
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #55555f;
 }
 
 .ticker-card__notice {
@@ -584,6 +591,43 @@ body {
   color: #c7c7f5;
   background: rgba(99, 102, 241, 0.15);
   border-color: rgba(99, 102, 241, 0.4);
+}
+
+.detail-sheet__ranges {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-top: -4px;
+}
+
+.detail-sheet__ranges::-webkit-scrollbar {
+  display: none;
+}
+
+.detail-sheet__range {
+  flex: 1 0 auto;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #8b8b96;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.detail-sheet__range:disabled {
+  color: #45454e;
+  cursor: not-allowed;
+}
+
+.detail-sheet__range.is-active {
+  color: #f3f3f7;
+  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.4);
+  font-weight: 600;
 }
 
 .detail-sheet__warning {

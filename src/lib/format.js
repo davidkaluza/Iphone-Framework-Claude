@@ -38,3 +38,13 @@ export function formatDate(isoDate) {
   if (Number.isNaN(date.getTime())) return isoDate;
   return dateFormatter.format(date);
 }
+
+/** Deutsche Kurzschreibweise TT.MM.JJJJ, z. B. "05.03.2026". */
+export function formatDateDMY(isoDate) {
+  if (!isoDate) return null;
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) return isoDate;
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  return `${dd}.${mm}.${date.getFullYear()}`;
+}
